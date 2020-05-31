@@ -22,7 +22,6 @@ const sec = document.getElementsByTagName("section");
 const nav = document.getElementById('navbar__list');
 const navbar = document.getElementsByClassName("navbar__menu")[0];
 
-
 /**
  * End Global Variables
  * Start Helper Functions
@@ -74,14 +73,20 @@ function buildNav() {
 
 // Add class 'active' to section when near top of viewport
 function active() {
-    var act = document.getElementsByClassName("your-active-class");
-    if (act.length > 0) {
-        act[0].classList.remove("your-active-class");
+    var navlist = document.getElementsByClassName("menu__link");
+    var act_sec = document.getElementsByClassName("your-active-class");
+    var act_link = document.getElementsByClassName("active__link");
+    if (act_sec.length > 0) {
+        act_sec[0].classList.remove("your-active-class");
+    }
+    if (act_link.length > 0) {
+        act_link[0].classList.remove("active__link");
     }
     for (i = 0; i < sec.length; i++) {
         var ele = sec[i];
         if (isInViewPort(ele)) {
             ele.classList.add("your-active-class");
+            navlist[i].classList.add("active__link");
             break;
         }
     }
@@ -106,7 +111,7 @@ document.getElementsByTagName("body").onload = buildNav();
 
 // Set sections as active
 // And hide nav bar while not scrolling
-window.setInterval(hideNav, 3000);
+//window.setInterval(hideNav, 3000);
 window.onscroll = function () {
     navbar.style.display = "block";
     this.active();
