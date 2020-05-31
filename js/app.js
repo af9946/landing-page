@@ -29,15 +29,31 @@ const navbar = document.getElementsByClassName("navbar__menu")[0];
  * 
 */
 
-function hideNav(){
+// Make navbar invisible in window
+
+function hideNav() {
     navbar.style.display = "none";
 }
 
-function buildList(data_nav){
+// Add list node for each section in nav and add event listener to it
+// When click the list, the page will scroll to corresponding section
+
+function buildList(data, i) {
     var node = document.createElement('li');
-    node.textContent = data_nav;
+    var sec_num = i + 1;
+    node.textContent = data;
     node.classList.add("menu__link");
+    node.addEventListener("click", function (event) {
+        scrollID("section" + sec_num);
+        event.preventDefault();
+    });
     nav.appendChild(node);
+}
+
+// Determine if given section in viewport
+function isInViewPort(ele) {
+    var rect = ele.getBoundingClientRect();
+    return rect.top > 0;
 }
 
 
@@ -47,31 +63,35 @@ function buildList(data_nav){
  * 
 */
 
-// build the nav
-function buildNav(){
-    for(var i = 0; i < sec.length; i++){
+// Build the nav
+function buildNav() {
+    for (var i = 0; i < sec.length; i++) {
         var data = sec[i].getAttribute("data-nav");
-        buildList(data);
+        buildList(data, i);
     }
 }
 
 
 // Add class 'active' to section when near top of viewport
-function active(cur){
-    
+function active() {
     var act = document.getElementsByClassName("your-active-class");
-    if (act.length >0){
+    if (act.length > 0) {
         act[0].classList.remove("your-active-class");
     }
-    var ele = document.getElementById(cur);
-    ele.classList.add("your-active-class");
+    for (i = 0; i < sec.length; i++) {
+        var ele = sec[i];
+        if (isInViewPort(ele)) {
+            ele.classList.add("your-active-class");
+            break;
+        }
+    }
 }
 
 
 // Scroll to anchor ID using scrollTO event
-function scrollID(nav_id){
+function scrollID(nav_id) {
     var ele = document.getElementById(nav_id);
-    ele.scrollIntoView();
+    ele.scrollIntoView({ behavior: "smooth", block: "center" });
 }
 
 
@@ -84,22 +104,10 @@ function scrollID(nav_id){
 // Build menu 
 document.getElementsByTagName("body").onload = buildNav();
 
-// Scroll to section on link click
-var nav_li = document.getElementsByClassName("menu__link");
-nav_li[0].addEventListener("click",function(){scrollID("section1");});
-nav_li[1].addEventListener("click",function(){scrollID("section2");});
-nav_li[2].addEventListener("click",function(){scrollID("section3");});
-nav_li[3].addEventListener("click",function(){scrollID("section4");});
- 
 // Set sections as active
-nav_li[0].addEventListener("click",function(){active("section1");});
-nav_li[1].addEventListener("click",function(){active("section2");});
-nav_li[2].addEventListener("click",function(){active("section3");});
-nav_li[3].addEventListener("click",function(){active("section4");});
-
-// Hide nav bar while not scrolling
+// And hide nav bar while not scrolling
 window.setInterval(hideNav, 3000);
-window.onscroll = function(){
+window.onscroll = function () {
     navbar.style.display = "block";
+    this.active();
 };
-
