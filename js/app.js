@@ -111,7 +111,7 @@ document.getElementsByTagName("body").onload = buildNav();
 
 // Set sections as active
 // And hide nav bar while not scrolling
-//window.setInterval(hideNav, 3000);
+window.setInterval(hideNav, 3000);
 window.onscroll = function () {
     navbar.style.display = "block";
     this.active();
